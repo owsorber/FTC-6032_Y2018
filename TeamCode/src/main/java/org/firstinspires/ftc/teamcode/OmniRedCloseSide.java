@@ -39,6 +39,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+/* OmniRedCloseSide (close side refers to side closest to relic recovery zone) */
+
 @Autonomous(name="OmniRedCloseSide", group="Linear Opmode")
 public class OmniRedCloseSide extends LinearOpMode {
    OmniHardware hardware;
