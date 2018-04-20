@@ -40,6 +40,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+/* OmniRedFarSide (far side refers to side furthest from relic recovery zone) */
+
 @Autonomous(name="OmniRedFarSide", group="Linear Opmode")
 public class OmniRedFarSide extends LinearOpMode {
    OmniHardware hardware;
