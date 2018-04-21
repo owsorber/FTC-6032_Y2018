@@ -55,15 +55,16 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 public class Auto extends LinearOpMode {
    OmniHardware hardware;
-   RelicRecoveryVuMark KEY;
-   public final double CRYPTOBOX_COL_WIDTH = 7.5;
+   
+   RelicRecoveryVuMark KEY; // RelicRecoveryVuMark object to store cryptobox key for autonomous
+   public final double CRYPTOBOX_COL_WIDTH = 7.5; // Width of cryptobox column
    public void runOpMode() {}
 
    public Auto(OmniHardware hardware) {
       this.hardware = hardware;
    }
 
-   // Encoder methods
+   // Calculate neverest encoder ticks for a given amount of motor rotations (method not currently being used)
    public int neverestEncoderVal(int motorRotations) {
       return hardware.NEVEREST_TICKS_PER_REV * motorRotations;
    }
@@ -80,6 +81,7 @@ public class Auto extends LinearOpMode {
       return (int) (distance * ticksPerRev / circumference);
    }
 
+   // Shortcut to resetting encoders
    private void resetEncoder(DcMotor motor) {
       motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
    }
@@ -103,9 +105,10 @@ public class Auto extends LinearOpMode {
       hardware.backRightMotor.setPower(direction * power);
       
       while (hardware.backLeftMotor.isBusy() && hardware.backRightMotor.isBusy()) {
-          // Wait
+          // Wait - MOTORS ARE BUSY
       }
 
+      // Reset power
       hardware.backLeftMotor.setPower(0);
       hardware.backRightMotor.setPower(0);
    }
@@ -125,12 +128,14 @@ public class Auto extends LinearOpMode {
       hardware.middleMotor.setPower(direction * power);
 
       while (hardware.middleMotor.isBusy()) {
-          // Wait
+          // Wait - MOTOR IS BUSY
       }
 
+      // Reset power
       hardware.middleMotor.setPower(0);
    }
 
+   
    /* Below are backup drive and strafe methods that don't use encoders and instead use a time in milliseconds */
    
    private void drive(int direction, double power, long milliseconds) throws InterruptedException {
@@ -160,6 +165,7 @@ public class Auto extends LinearOpMode {
       hardware.middleMotor.setPower(0);
    }
 
+   // Calibrate gyrosensor using calibrate method and waiting until calibration is complete
    public void calibrateGyro() {
       hardware.gyroSensor.calibrate(); // Sets Gyro Sensor to 0
       while(hardware.gyroSensor.isCalibrating()) {
@@ -208,8 +214,8 @@ public class Auto extends LinearOpMode {
       hardware.backRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
    }
 
-   // These methods implement the gyro sensor to turn the robot at a certain angle
-   // @param angle: positive angle from 0 to 360
+   // This method implements the gyro sensor to turn the robot at a certain angle
+   // @param angle: positive angle from 0 to 360 (note that getHeading() returns an integer value)
    public void turnRight(int angle) throws InterruptedException {
       // May or may not want to calibrate gyro before calling this method
       hardware.backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -221,6 +227,7 @@ public class Auto extends LinearOpMode {
 
       // Turn right
       while (currAngle < angle || (startingAngle > angle && currAngle >= startingAngle)) {
+         // Determine power based on start and current angular position of robot
          if (startingAngle > angle) {
              if (currAngle >= startingAngle)
                  pow = (angle + 360 - currAngle)/(angle + 360 - startingAngle) + 0.1;
@@ -265,7 +272,7 @@ public class Auto extends LinearOpMode {
       movePully(-1);
    }
 
-   // Metehods pull in or push out glyphs
+   // Methods pull in or push out glyphs for a specific amount of milliseconds
    public void mecanumsIn(long milliseconds) throws InterruptedException {
       hardware.leftMec.setPower(-1);
       hardware.rightMec.setPower(-1);
@@ -281,7 +288,7 @@ public class Auto extends LinearOpMode {
       hardware.rightMec.setPower(0);
    }
 
-   // Implements the turnAndBack method and the color sensor to knock the jewel
+   // Implements the turnAndBack method and the color sensor to knock the jewel - wins us 30 points in autonomous
    public void knockJewel(String alliance) throws InterruptedException {
       hardware.colorServo.setPosition(hardware.SERVO_DOWN);
       sleep(2000);
@@ -298,10 +305,11 @@ public class Auto extends LinearOpMode {
       return (hardware.colorSensor.red() > hardware.colorSensor.blue());
    }
 
-   // This method sets a value to KEY based on what is read by the camera - taken from Vuforia
+   // This method sets a value to KEY based on what is read by the camera (taken from Vuforia)
    public void readPictograph(HardwareMap hardwareMap) {
       VuforiaLocalizer vuforia;
 
+      // Below is OUR team vuforia license key. You need your own.
       VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
       parameters.vuforiaLicenseKey = "AdwaKe7/////AAAAmVQWX/gUQE/gnK+olEmSWA5FCaxNrdY/EyKFLO2afR1IQD4gbnThc6LcCHIJ64hyC2i3n5VRiIRAMGxtKqjI7meHCphQAPrXpH9GomENr/fSXjVUhQao+Zw0/MLQEuTaqNYnp5EI/4oo6LTm/YPgYKOSPaP+tijaydiwNQn4A8zXPfDhkD/q6RTYMzS3UtpOR7WBZJPUBxW9XKim5ekHbYd1Hk2cFTTFAsL0XwycIWhuvHYpVlnZMqWwEnkTqp0o+5TE1FLkAfJ4OOUEfB8sP9kMEcged2/tczAh3GOcjOudp1S9F5xjPFZQX00OLV+QUCPzmT5kkqFBwiS30YR6L8urW2mJG4quq6NnrNYwzn47";
       parameters.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT; // Set to front instead of back since our RC needs to use the selfie camera
@@ -324,7 +332,7 @@ public class Auto extends LinearOpMode {
       hardware.backLeftMotor.setPower(0);
       hardware.backRightMotor.setPower(0);
 
-      while (vuMark == RelicRecoveryVuMark.UNKNOWN) {
+      while (vuMark == RelicRecoveryVuMark.UNKNOWN && getRunTime() < 5) {
          // Wait until it decodes the pictograph
          vuMark = RelicRecoveryVuMark.from(relicTemplate);
       }
