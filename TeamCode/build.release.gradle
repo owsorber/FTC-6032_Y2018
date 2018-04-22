@@ -1,8 +1,8 @@
 dependencies {
-    implement project(':FtcRobotController')
-    implement (name: 'RobotCore-release', ext: 'aar')
-    implement (name: 'Hardware-release', ext: 'aar')
-    implement (name: 'FtcCommon-release', ext: 'aar')
-    implement (name:'Analytics-release', ext:'aar')
-    implement (name:'WirelessP2p-release', ext:'aar')
+    implementation project(':FtcRobotController')
+    implementation (name: 'RobotCore-release', ext: 'aar')
+    implementation (name: 'Hardware-release', ext: 'aar')
+    implementation (name: 'FtcCommon-release', ext: 'aar')
+    implementation (name:'Analytics-release', ext:'aar')
+    implementation (name:'WirelessP2p-release', ext:'aar')
 }
