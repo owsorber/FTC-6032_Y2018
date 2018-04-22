@@ -1,9 +1,9 @@
 dependencies {
-    implement (name:'Inspection-release', ext: 'aar')
-    implement (name:'Blocks-release', ext: 'aar')
-    implement (name:'RobotCore-release', ext: 'aar')
-    implement (name:'Hardware-release', ext: 'aar')
-    implement (name:'FtcCommon-release', ext: 'aar')
-    implement (name:'Analytics-release', ext:'aar')
-    implement (name:'WirelessP2p-release', ext:'aar')
+    implementation (name:'Inspection-release', ext: 'aar')
+    implementation (name:'Blocks-release', ext: 'aar')
+    implementation (name:'RobotCore-release', ext: 'aar')
+    implementation (name:'Hardware-release', ext: 'aar')
+    implementation (name:'FtcCommon-release', ext: 'aar')
+    implementation (name:'Analytics-release', ext:'aar')
+    implementation (name:'WirelessP2p-release', ext:'aar')
 }
