@@ -332,7 +332,7 @@ public class Auto extends LinearOpMode {
       hardware.backLeftMotor.setPower(0);
       hardware.backRightMotor.setPower(0);
 
-      while (vuMark == RelicRecoveryVuMark.UNKNOWN && getRunTime() < 5) {
+      while (vuMark == RelicRecoveryVuMark.UNKNOWN && getRuntime() < 5) {
          // Wait until it decodes the pictograph
          vuMark = RelicRecoveryVuMark.from(relicTemplate);
       }
