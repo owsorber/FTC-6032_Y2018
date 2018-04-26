@@ -309,6 +309,8 @@ public class Auto extends LinearOpMode {
    public void readPictograph(HardwareMap hardwareMap) {
       VuforiaLocalizer vuforia;
 
+      double startTime = System.currentTimeMillis();
+      
       // Below is OUR team vuforia license key. You need your own.
       VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
       parameters.vuforiaLicenseKey = "AdwaKe7/////AAAAmVQWX/gUQE/gnK+olEmSWA5FCaxNrdY/EyKFLO2afR1IQD4gbnThc6LcCHIJ64hyC2i3n5VRiIRAMGxtKqjI7meHCphQAPrXpH9GomENr/fSXjVUhQao+Zw0/MLQEuTaqNYnp5EI/4oo6LTm/YPgYKOSPaP+tijaydiwNQn4A8zXPfDhkD/q6RTYMzS3UtpOR7WBZJPUBxW9XKim5ekHbYd1Hk2cFTTFAsL0XwycIWhuvHYpVlnZMqWwEnkTqp0o+5TE1FLkAfJ4OOUEfB8sP9kMEcged2/tczAh3GOcjOudp1S9F5xjPFZQX00OLV+QUCPzmT5kkqFBwiS30YR6L8urW2mJG4quq6NnrNYwzn47";
@@ -332,7 +334,8 @@ public class Auto extends LinearOpMode {
       hardware.backLeftMotor.setPower(0);
       hardware.backRightMotor.setPower(0);
 
-      while (vuMark == RelicRecoveryVuMark.UNKNOWN && getRuntime() < 5) {
+      // Continue reading pictograph until decoded unless 5 seconds have passed
+      while (vuMark == RelicRecoveryVuMark.UNKNOWN && System.currentTimeMillis() - startTime < 5000) {
          // Wait until it decodes the pictograph
          vuMark = RelicRecoveryVuMark.from(relicTemplate);
       }
